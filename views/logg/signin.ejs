@@ -1,0 +1,17 @@
+<%- include('../partiel/header.ejs') %> 
+
+<form class="logg-form" action="/logg/signin" method="POST">
+    <legend>
+        S'indentifier 
+    </legend>
+<label for="username"> Votre nom ici</label>
+<input type="text" name="username"> 
+<label for="password">votre mot de passe ici </label>
+<input type="password" name="password"> 
+<label for="email"> Votre email </label>
+<input type="email" name="email"> 
+<button class="btn btn-success"type="submit">Valider</button>
+</form>
+
+
+<%- include('../partiel/footer.ejs') %> 

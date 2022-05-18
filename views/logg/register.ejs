@@ -1,0 +1,26 @@
+<%- include('../partiel/header.ejs') %> 
+<form class="logg-form" method="POST" action="/logg/register">
+    <legend>
+        Inscrivez vous 
+    </legend>
+<label for="username"> Votre nom ici</label>
+<input type="text" name="username"> 
+<label for="password">votre mot de passe ici </label>
+<input type="password" name="password"> 
+<label for="email"> Votre email </label>
+<input type="email" name="email"> 
+<button class="btn btn-success"type="submit">Valider</button>
+</form>
+<section>
+    <div class="alreadyRegister">
+        <h2> Rejoins les utilisateurs déjà inscrits </h2>
+        <ul>
+            <% users.forEach(user => { %>
+            <li> <%= user.username  %> </li> 
+     
+            <% }) %>
+    
+        </ul>
+    </div>
+</section>
+<%- include('../partiel/footer.ejs') %> 
