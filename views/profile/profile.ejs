@@ -6,7 +6,11 @@
     <div id="mur">
         <h2> Vos messages</h2>
     <div id="messageMur">
-        <%= message %> 
+        <% for( let index = 0; index < message.length; index++ ) { %>
+            <%= message[index]["message"] %> 
+            <%= message[index]["date"] %> 
+        <% } %>
+        
     </div>
 <a href="/profile/morpion/<%=user._id %>"> Jouez au morpion</a>
 </div>

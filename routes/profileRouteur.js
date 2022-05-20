@@ -13,16 +13,12 @@ const userSchema = require('../modeles/user.modele');
 profileRouteur.use(bodyParser.urlencoded({extended:false}));
 
 
-profileRouteur.get('/:id', (req,res) => {
-    var user = userSchema.findById(req.params.id)
-    .exec()
-    .then( (user) => {
-    var message = messageSchema.find({receveur : user.username}) 
-    console.log(message);         
-    res.render("profile/profile", { user: user, message : message})    
-    }) 
-    .catch (error => console.log(error))
-}); 
+profileRouteur.get('/:id', async(req,res) => {
+    var userReceveur = await userSchema.findById(req.params.id)
+    var message =  await messageSchema.find({receveur : userReceveur.username}) 
+    try{res.render("profile/profile", { user: userReceveur, message :message})} 
+    catch(error) { console.log(error)}
+})
 
 profileRouteur.get('/morpion/:id', (req,res) => {
     var user = userSchema.findById(req.params.id)

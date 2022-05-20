@@ -56,7 +56,7 @@ exports.userRegister = async(req,res) => {
     
     try {
         await user.save();
-        res.redirect('/')
+        res.redirect('/logg/signin')
             } catch (err) {
             res.status(400).send(err);
             }

@@ -24,9 +24,11 @@ var clients = [];
 io.on('connection', (socket) => {
     
     socket.on('join', ({username}, callback) => {
-        clients.push(username); 
+        if (!clients.includes(username)){
+        clients.push(username); };
         io.emit('has joined', {username : username, clients: clients});  
-        })
+            
+    })
 
 
     socket.on('chat message', (msg) => {

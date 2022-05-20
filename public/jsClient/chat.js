@@ -79,15 +79,18 @@ socket.on('has joined', (user) => {
     item.classList.add("item");
     item.classList.add("nopoint");
     item.textContent = `${user.username} is connected`;
-    var isAlreadyConnected = user.clients.includes(user.username); 
-    if (!isAlreadyConnected){
-    clients.push(user);} 
+
+    var isAlreadyConnected = user.clients.includes(user.username);
+    console.log(user);
+
+    if (!isAlreadyConnected){ clients.push(user.username)  } 
     connectedMessage.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);
+    
 
     var users = "";
     var urlcourante = document.location.href;
-    console.log(user.clients);
+    
     for ( var i = 0 ; i < user.clients.length ; i++){
         if (user.clients[i] != input.name){
         users += `<li class="nopoint">`+ user.clients[i] +`<a href="${urlcourante}/${user.clients[i]}"><button class="btnMessagerie btn btn-success" >Messagerie</button></a></li>`
