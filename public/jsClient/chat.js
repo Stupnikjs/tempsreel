@@ -7,6 +7,7 @@ var socket = io();
 const btnReduceChat = document.querySelector('#reduceChat');  
 const sendChat = document.querySelector('#sendChat');  
 const activateChat = document.querySelector('#activateChat'); 
+const btnMessagerie = document.querySelector('btnMessagerie')
 
 //ul 
 const chatMessage = document.querySelector('#chatMessages'); 
@@ -48,8 +49,14 @@ activateChat.addEventListener('click' , (e) => {
     activateChat.classList.add("d-none"); 
 }); 
 
+/*
+btnMessagerie.addEventListener('click', () => {
 
 
+
+
+})
+*/
 // socket 
 
 var clients = []; 
@@ -79,10 +86,12 @@ socket.on('has joined', (user) => {
     window.scrollTo(0, document.body.scrollHeight);
 
     var users = "";
+    var urlcourante = document.location.href;
     console.log(user.clients);
     for ( var i = 0 ; i < user.clients.length ; i++){
-        users += `<li class="nopoint">`+ user.clients[i] +"</li>"
-    }
+        if (user.clients[i] != input.name){
+        users += `<li class="nopoint">`+ user.clients[i] +`<a href="${urlcourante}/${user.clients[i]}"><button class="btnMessagerie btn btn-success" >Messagerie</button></a></li>`
+        }}
     userConnected.innerHTML = users;    
     }); 
 

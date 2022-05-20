@@ -3,7 +3,7 @@ const loggRouteur = express.Router();
 const bodyParser = require('body-parser');
 const userSchema = require('../modeles/user.modele');
 
-const { verifySchemaMailPasswordCreateToken, userRegister, } = require('../controllers/loggControler');
+const { verifySchemaMailPasswordCreateToken, userRegister, } = require('../controllers/loggController');
 
 loggRouteur.use(bodyParser.urlencoded({extended:false})); 
 

@@ -2,7 +2,14 @@
 
 
 
-
+.container{
+    display: flex;
+    flex-direction: row;
+    height: 80%;
+    align-content: stretch;
+    
+    
+}
 
 
 /*--------------------------------------------------- Chat ------------------------------------------------------------------*/
@@ -58,8 +65,59 @@ align-self: flex-end;
 
 }
 
+
+/*--------------------------------------------------- Messages ------------------------------------------------------------------*/
+
+
 #chatMessage {
     flex-grow: 4;
 
 
 }
+
+
+#mur {
+    border: solid 1px grey;
+    flex: 0.8;
+    margin-top: 3.7%; 
+    height: 500px;
+    
+
+}
+
+#formMessage {
+
+display: flex;
+flex-direction: column;
+
+}
+
+
+/*--------------------------------------------------- Morpion ------------------------------------------------------------------*/
+
+.caseMorpion {
+    background-color: antiquewhite;
+    border-radius: 1em;
+    border: solid 1px grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+}
+.btnChoice{
+    margin: auto;
+    
+}
+
+
+#gameBox{
+    margin-top: 3%;
+    margin-left: 3%;
+    width: 600px;
+    height: 600px;
+    display: grid;
+    grid-template-columns: [first] 33% [line2] 33% [line3] auto ;
+    grid-template-rows: [row1-start] 33% [row1-end] 33% [third-line] auto [last-line];
+
+}
+

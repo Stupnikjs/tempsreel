@@ -1,15 +1,33 @@
 <%- include('../partiel/header.ejs') %>
 
-<h1> Bonjour <%=user.username %> </h1>
 
 <div class="container">
-    <div id="mur">
-        <h2> Vos messages</h2>
-    <div id="messageMur">
-        <%= message %> 
-    </div>
-<a href="/profile/morpion/<%=user._id %>"> Jouez au morpion</a>
-</div>
+    <form id="formMessage" action="/profile/message/<%= user._id %>" method="POST" >
+        <div class="d-none">
+        <label for="id" class="d-none"></label>
+        
+        <input type="text" name="id" value=<%= user._id %>>
+        </div>
+        <label for="message" name=<%= receveur %> > Entrez votre message a  </label> 
+
+        <input type="text" name="receveur" value=<%= receveur %> >
+
+        <textarea name="message" class="d-block" row="30" cols="55"></textarea>
+
+        <button type="submit" class="btn btn-success d-block w-100">Envoyer</button>
+
+    </form>
+
+
+
+
+
+
+
+
+
+
+
     <aside> 
         <button id="activateChat" class="d-none btn btn-danger"> Activer le chat</button>
         <div class="" id="chatBox">
@@ -34,4 +52,5 @@
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/jsClient/chat.js"></script>
+<script src="/jsClient/messagerie.js"></script>
 <%- include('../partiel/footer.ejs') %> 

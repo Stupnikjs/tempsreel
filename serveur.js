@@ -16,7 +16,7 @@ mongoose.connect(process.env.DB_CONFIG, ()=> {
 // socket config 
 const http = require("http"); 
 const server = http.createServer(app); 
-const { Server, Socket } = require('socket.io');
+const { Server } = require('socket.io');
 const io = new Server(server)
 
 var clients = []; 
