@@ -1,23 +1,46 @@
 
-
-var caseMorpion = document.querySelectorAll(".caseMorpion"); 
-
+var socket = io(); 
 
 var tableau = [
-    ["0" , "0" ,"0" ],
-    ["0" , "0" ,"0" ],
-    ["0" , "0" ,"0" ],
+   ["0" , "0" ,"0" ],
+   ["0" , "0" ,"0" ],
+   ["0" , "0" ,"0" ],
 ]
+
+const btnMorpion = document.querySelector('.btnMorpion'); 
+
+
+/*
+// socket 
+var demandePartie = false
+
+socket.emit("lancerPartie", demandePartie = true ); 
+
+
+socket.on('demandePartie', function(msg) {
+    
+});
+
+
+*/
+
 
 
 const gameBox = document.querySelector('#gameBox'); 
 
+// affichage de la grille
+
 const tabDisplay = (tab, parent) => {
-for ( var i = 0 ; i < tab.length ; i++){
-for (var j = 0 ; j < tab.length; j++){
+
+for ( var i = 0 ; i < tab.length ; i++){  // boucle sur la colone 
+for (var j = 0 ; j < tab[i].length; j++){   // boucle sur la ligne 
 
  var carre = document.createElement('div'); 
  carre.classList.add('caseMorpion');
+
+
+
+ // nom d'attribut en fonction du numero de la case
  if (i === 0){
     var nomAttribut = "#n" + ((j+1)*(i+1).toString())
  } else if (i === 1) {
@@ -27,76 +50,70 @@ for (var j = 0 ; j < tab.length; j++){
  }
  
  carre.setAttribute("id", nomAttribut );
- 
+
  if (tab[i][j]!= "0"){
     carre.innerHTML = tab[i][j];}
-else{ carre.addEventListener('click', (e) => {
-    if (carre.childElementCount === 0){
-    console.log(e.target) ;   
-    var btnX = document.createElement('btn');
-    console.log(nomAttribut);
-    btnX.classList.add("btn"); 
-    btnX.classList.add("btn-success");
-    btnX.setAttribute("id", "btn" + nomAttribut ); 
-    btnX.innerHTML = "X"
-    e.target.appendChild(btnX); 
+ else{ carre.addEventListener('click', (e) => {
+    if (carre.childElementCount === 0 ){
+    var BtnX = creerBoutonCase( BtnX, e.target, 'X');
+    var BtnO = creerBoutonCase(BtnO, e.target, 'O'); 
+    BtnX.addEventListener('click', ()=> {
+        var tableauModif = modifierTabClick(tableau, BtnX); 
+        
+    })
+    if (e.target instanceof HTMLDivElement){
+        
+    e.target.appendChild(BtnX); 
+    e.target.appendChild(BtnO);
+
     }
+}
 })};  
  parent.appendChild(carre); 
 }    
-}}
-
-tabDisplay(tableau,gameBox ); 
-
-
+}
+console.log(parent)
+}
 
 
-
+tabDisplay(tableau,gameBox); 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-/*
-caseMorpion.forEach( element => {
-    element.addEventListener( 'click' , () => {
-        if(element.childElementCount === 0){
-            const btn0 = creerBoutonChoix(element, "O"); 
-            const btnX = creerBoutonChoix(element, "X");
-            btn0.addEventListener('click', () => {
-                btn0.classList.add("d-none")
-            }); 
-            btnX.addEventListener('click', () => {
-                btnX.classList.add("d-none")
-            }) 
-        }
-
-    })
-})
  
 
 
-const creerBoutonChoix = (element) => {
-    var buttonO = document.createElement('button'); 
-    buttonO.classList.add("btn"); 
-    buttonO.classList.add("btn-success");
-    buttonO.classList.add("btnChoice");
-    buttonO.addEventListener('click', () =>{
-        element.innerHTML = buttonO.innerHTML; 
-        buttonO.classList.remove("btn");
-        buttonO.classList.remove("btn-success");
-        buttonO.classList.remove("btnChoice"); 
-    });  
-    element.appendChild(buttonO);
-    return buttonO; 
+// creer button dans caseMorpion :
+
+const creerBoutonCase = (leBouton, parent, N) => {
+    var leBouton = document.createElement('bouton');
+   
+    leBouton.classList.add("btn"); 
+    leBouton.classList.add("btn-success");
+    leBouton.setAttribute("id", parent.id );
+    leBouton.innerHTML = N 
+
+    return leBouton
 }
-*/
+
+
+
+
+
+const modifierTabClick = ( tab , btn ) => {
+    var indice = parseInt(btn.id.slice(2)) ;
+    console.log(indice) ; 
+    switch (indice) {
+        case 1 : tab[0][0] = btn.innerHTML ; break; 
+        case 2 : tab[0][1] = btn.innerHTM; break; 
+        case 3 : tab[0][2] = btn.innerHTM ; break; 
+        case 4 : tab[1][0] = btn.innerHTM; break; 
+        case 5 : tab[1][1] = btn.innerHTM; break; 
+        case 6 : tab[1][2] = btn.innerHTM; break; 
+        case 7 : tab[2][0] = btn.innerHTM ; break; 
+        case 8 : tab[2][1] = btn.innerHTM ; break; 
+        case 9 : tab[2][2] = btn.innerHTM ; break; 
+        default : break
+    } 
+    return tab 
+} 

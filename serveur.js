@@ -21,7 +21,11 @@ const io = new Server(server)
 
 var clients = []; 
 
+// il faut associer le nom de l'utilisateur a l'id de la socket 
+
 io.on('connection', (socket) => {
+
+    socket.join("mainroom");
     
     socket.on('join', ({username}, callback) => {
         if (!clients.includes(username)){
@@ -34,6 +38,11 @@ io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
       io.emit('chat message', msg  );
     }); 
+
+    socket.on('demandePartie',(user) => {
+        console.log("user socket id : " + user.socketId); 
+        socket.broadcast.to(user.socketId).emit('nouvellePartie', user.name)
+    } )
 
     socket.on('disconnect', (socket) => {
     console.log("user disconnected")
