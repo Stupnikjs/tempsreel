@@ -10,19 +10,7 @@ var tableau = [
 const btnMorpion = document.querySelector('.btnMorpion'); 
 
 
-/*
-// socket 
-var demandePartie = false
 
-socket.emit("lancerPartie", demandePartie = true ); 
-
-
-socket.on('demandePartie', function(msg) {
-    
-});
-
-
-*/
 
 
 

@@ -19,35 +19,49 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server)
 
-var clients = []; 
+ var clients = [];  
+ var socketUsers = []; 
+
 
 // il faut associer le nom de l'utilisateur a l'id de la socket 
 
-io.on('connection', (socket) => {
-
-    socket.join("mainroom");
+io.sockets.on('connection', (socket) => {
+ 
+    socket.on('join', ((user) => {
+        const userObj = { socket: socket, user : user}; 
+        socketUsers.unshift(userObj); 
+        io.emit('has joined', user);
+}));        
     
-    socket.on('join', ({username}, callback) => {
-        if (!clients.includes(username)){
-        clients.push(username); };
-        io.emit('has joined', {username : username, clients: clients});  
-            
-    })
 
 
     socket.on('chat message', (msg) => {
       io.emit('chat message', msg  );
     }); 
 
-    socket.on('demandePartie',(user) => {
-        console.log("user socket id : " + user.socketId); 
-        socket.broadcast.to(user.socketId).emit('nouvellePartie', user.name)
-    } )
-
-    socket.on('disconnect', (socket) => {
-    console.log("user disconnected")
+    // on recoit la demande et on l'envoie a la cible
+    socket.on('demande morpion', (users) => {
+        let socketCible= socketUsers.find( obj => obj['user'] === users.cible);
+        console.log(socketCible) ;
+        socket.to(socketCible['socket']['id']).emit('commencer morpion', users.demandeur); 
+    })
+    // la cible a validé 
+    socket.on('partie acceptée', (cible) =>{
+       
+        socket.to(socketCible).emit('partie debut');
+        
+        
+    })    
+    socket.on('disconnect', () => {
+        socket.getMaxListeners('username', function(err, user){
+              socket.clients = clients; 
+              delete socketUsers[socket.id]; 
+            //io.sockets.emit('update', clients)
+         })
     });
+
 })
+
 
 
 

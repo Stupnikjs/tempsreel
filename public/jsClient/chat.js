@@ -52,14 +52,18 @@ activateChat.addEventListener('click' , (e) => {
 
 
 // socket 
-
-var clients = []; 
-
+ 
 
 
-socket.emit("join", {username: input.name}); 
+// un utilisateur se connecte 
+
+socket.emit("join", input.name); 
+
+
+//reception et affichage du message 
 
 socket.on('chat message', function(msg) {
+
     var item = document.createElement('li');
     item.classList.add("item");
     item.classList.add("nopoint");
@@ -69,77 +73,178 @@ socket.on('chat message', function(msg) {
 });
 
 
+
 socket.on('has joined', (user) => {
-    
-    var item = document.createElement('p');
+
+
+    // un autre utilisateur se connecte et on l'affiche
+
+    // dans l'entete du chat 
+    var item = document.querySelector(`.item#${user}`);
+    console.log(item);  
+    if (item === null){     
+    item = document.createElement('p');
     item.classList.add("item");
+    item.setAttribute('id', user)
     item.classList.add("nopoint");
-    item.textContent = `${user.username} is connected`;
-
-    var isAlreadyConnected = user.clients.includes(user.username);
-
-    if (!isAlreadyConnected){ clients.push(user.username)  } 
-    connectedMessage.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
+    item.textContent = `${user} is connected`;
     
-    userConnected.innerHTML = displayUserConnected( user.clients, document); 
-
-    for (var i = 0 ; i < user.clients.length ; i++){
-        var btn = displayBtnMorpion(user.clients, socket, i); 
-        if(boutonsMorpion.childElementCount < user.clients.length && btn.id != input.name)
-        boutonsMorpion.appendChild(btn)
-    }   
-})
-
-
-// socket morpion
-    
-     
-    
-     socket.on("nouvellePartie", (user) => {
-         var accepterPartieContre = confirm(`Acceptez vous la partie contre  ${user} ? `); 
-         console.log(accepterPartieContre)   
-     });
-
-    
- 
-    
- 
+    if (item.id != input.name){ 
+    connectedMessage.appendChild(item)};
     
 
-    const displayUserConnected = (clientsArray, document) => {
-
-    var users = "";
-    var urlcourante = document.location.href;
-
-    for ( var i = 0 ; i < clientsArray.length ; i++){
-        if (clientsArray[i] != input.name){
-        users += `<li class="nopoint">`+ clientsArray[i] +`<a href="${urlcourante}/${clientsArray[i]}"><button class="btnMessagerie btn btn-success" >Messagerie</button></a></li>`
-        
-            }
-        } 
-        
-        return users;  
-
-    }; 
-
-
-    const displayBtnMorpion = (clientsArray, socket, n) => {
-
-        var btnMorpion = document.createElement('button'); 
-        
-        btnMorpion.setAttribute('id', clientsArray[n]);
-
-        btnMorpion.innerHTML = clientsArray[n];
-
-        btnMorpion.classList.add('btn');  
-        btnMorpion.classList.add('btn-success'); 
-        
-        btnMorpion.addEventListener('click', (e) => {
-            var confirmerDemande = confirm(`Voulez vous vraiment lancer Partie contre ${e.target.innerHTML}`)
-            if (confirmerDemande){
-            socket.emit("demandePartie", {name : input.name, socketId : socket.id})
+    // affichage des boutons 
+  
+   
+    var btn = document.querySelector(`.btn#${user}`);  
+    if(user != input.name){
+    if(btn === null){ 
+    btn = createButtonMorpion(user); 
+    userConnected.appendChild(btn)
+    }}
     }
 })
-return btnMorpion
+
+socket.on('commencer morpion', (demandeur) => {
+    console.log("cible atteinte");
+    var confirm = window.confirm( `voulez vous faire une partie de morpion contre ${demandeur}`); 
+    if(confirm){
+        const morpionurl = insertMorpionUrl(); 
+        location.assign(morpionurl); 
+        socket.emit('partie acceptée', input.name)
+    }
+    })
+ 
+socket.on("partie debut", () => {
+        const morpionurl = insertMorpionUrl(); 
+        console.log(morpionurl);
+        location.assign(morpionurl); 
+
+
+})
+
+socket.on("update", (clients) => {
+    socket.clients = clients
+})
+
+
+
+
+
+
+
+
+
+
+
+
+//fonctions 
+
+
+const insertMorpionUrl = () => {
+    var urlcourante = document.location.href; 
+        var debuturl = urlcourante.slice(0,30); 
+        var finurl = urlcourante.slice(30, urlcourante.length); 
+        var morpionurl = debuturl + 'morpion/' + finurl
+        console.log(morpionurl);
+        return(morpionurl)
 }
+
+const createButtonMorpion = (client) => {
+        var btn = document.createElement('button');
+        btn.classList.add('btn');
+        btn.classList.add('btn-success');
+        btn.setAttribute('id', client); 
+        btn.textContent = client;
+        
+        btn.addEventListener("click", (e)=> {
+           var confirm = window.confirm(`voulez vous jouer au morpion contre ${e.target.textContent}`)
+           if (confirm){    
+            socket.emit('demande morpion', { demandeur : input.name, cible : e.target.textContent })
+            }
+            })       
+        return btn    
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//     const displayUserConnected = (clientsArray, document) => {
+
+//     var users = "";
+//     var urlcourante = document.location.href;
+
+//     for ( var i = 0 ; i < clientsArray.length ; i++){
+//         if (clientsArray[i] != input.name){
+//         users += `<li class="nopoint">`+ clientsArray[i] +`<a href="${urlcourante}/${clientsArray[i]}"><button class="btnMessagerie btn btn-success" >Messagerie</button></a></li>`
+        
+//             }
+//         } 
+        
+//         return users;  
+
+//     }; 
+
+
+//     const displayBtnMorpion = (clientsArray, socket, n) => {
+
+//         var btnMorpion = document.createElement('button');
+        
+        
+//         btnMorpion.setAttribute('id', clientsArray[n]);
+
+//         btnMorpion.innerHTML = clientsArray[n];
+
+//         btnMorpion.classList.add('btn');  
+//         btnMorpion.classList.add('btn-success'); 
+        
+//         btnMorpion.addEventListener('click', (e) => {
+//             var confirmerDemande = confirm(`Voulez vous vraiment lancer Partie contre ${e.target.innerHTML}`)
+//             if (confirmerDemande){    
+           
+//     }
+// })
+// return btnMorpion
+// }
