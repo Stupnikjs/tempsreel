@@ -107,6 +107,7 @@ socket.on('has joined', (user) => {
 
 socket.on('commencer morpion', (demandeur) => {
     console.log("cible atteinte");
+    window.focus();
     var confirm = window.confirm( `voulez vous faire une partie de morpion contre ${demandeur}`); 
     if(confirm){
         const morpionurl = insertMorpionUrl(); 
