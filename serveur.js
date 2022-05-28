@@ -4,13 +4,13 @@ const routeur = require('./routes/routeur');
 const loggRouteur = require('./routes/loggRouteur');
 const mongoose = require('mongoose')
 const dotenv = require('dotenv'); 
-const profileRouteur = require('./routes/profileRouteur');
+const cookieParser = require('cookie-parser'); 
+
 
 dotenv.config();
 mongoose.connect(process.env.DB_CONFIG, ()=> {
     console.log("DB connected")
 })
-
 
 
 // socket config 
@@ -41,14 +41,13 @@ io.sockets.on('connection', (socket) => {
 
     // on recoit la demande et on l'envoie a la cible
     socket.on('demande morpion', (users) => {
-        let socketCible= socketUsers.find( obj => obj['user'] === users.cible);
-        console.log(socketCible) ;
-        socket.to(socketCible['socket']['id']).emit('commencer morpion', users.demandeur); 
+    
+        socket.to(socketIdFromUsername(socketUsers, users.cible)).emit('commencer morpion', users.demandeur); 
     })
     // la cible a validé 
     socket.on('partie acceptée', (cible) =>{
-       
-        socket.to(socketCible).emit('partie debut');
+        
+        socket.to(socketIdFromUsername(socketUsers, cible)).emit('partie debut');
         
         
     })    
@@ -65,8 +64,10 @@ io.sockets.on('connection', (socket) => {
 
 
 
+app.use(cookieParser()); 
+
 app.use(express.static('public'))
-app.use('/profile', profileRouteur)
+
 app.use('/logg', loggRouteur);
 app.use('/', routeur);
 
@@ -76,3 +77,12 @@ app.set('view engine', 'ejs');
 server.listen( process.env.PORT || 4646, () => {
     console.log(`connected on port ${process.env.PORT || 4646}`)
 })
+
+
+// fonctions 
+
+const socketIdFromUsername = (socketArray, username) => {
+    let socketCible= socketArray.find( obj => obj['user'] === username);
+    let socketCibleId = socketCible['socket']['id'];
+    return socketCibleId
+    }

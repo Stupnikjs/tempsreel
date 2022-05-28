@@ -3,33 +3,11 @@
 
 
 <div class="container">
- <div id="gameBox">
-     
+    
+    <div id="gameBox">
+    </div>
 
 
-</div>
-
-    <aside> 
-        <button id="activateChat" class="d-none btn btn-danger"> Activer le chat</button>
-        <div class="" id="chatBox">
-            <div id="subChatBox">
-                <h2> Chat</h2>
-                <div id="connectedMessage">
-            </div>
-                <form id="chatForm" action="" method="">
-                    <input type="text" id="chatInput" name=<%=user.username %> >
-                    <button class="btn btn-primary" type="submit" id="sendChat">Envoyer</button>
-                    <ul id="chatMessages">
-                        </ul>
-                </form>
-                <button id="reduceChat" class="btn btn-danger"> Reduire le chat </button>
-            </div>
-            <div>
-                <ul id="userConnected">
-                </ul>
-            </div>
-        </div>
-    </aside> 
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/jsClient/chat.js"></script>

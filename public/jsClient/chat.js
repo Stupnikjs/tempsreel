@@ -4,33 +4,36 @@
 var socket = io(); 
 
 //button
-const btnReduceChat = document.querySelector('#reduceChat');  
-const sendChat = document.querySelector('#sendChat');  
-const activateChat = document.querySelector('#activateChat'); 
-const btnMessagerie = document.querySelector('btnMessagerie')
+  
+//chat
+const ulMessagesChat = document.querySelector('#ulMessagesChat')
 
-//ul 
-const chatMessage = document.querySelector('#chatMessages'); 
-const userConnected = document.querySelector('#userConnected');
+const masquerChat = document.querySelector('#masquerChat')
+const chatBox = document.querySelector('#chatBox'); 
+const activerChat = document.querySelector('#activerChat');
+
+const ulIsConnected = document.querySelector('#ulIsConnected');
 const boutonsMorpion = document.querySelector('#boutonsMorpion');
+const input = document.querySelector('#inputChat')
+const connectedMessages = document.querySelector('#connectedMessages'); 
 
-const connectedMessage = document.querySelector('#connectedMessage'); 
-
-
-const form = document.querySelector('#chatForm'); 
-const input = document.querySelector('#chatInput');
-const chatBox = document.querySelector('#chatBox');
 
 // btn 
+form = document.querySelector('#chatForm')
 
-btnReduceChat.addEventListener('click', (e) => {
-    console.log(e)
-    e.preventDefault();
-    chatBox.classList.add("d-none"); 
-    activateChat.classList.remove("d-none");
-  });
-  
-  
+
+masquerChat.addEventListener('click', () => {
+    chatBox.classList.add('d-none'); 
+    activerChat.classList.remove('d-none');
+
+})
+activerChat.addEventListener('click', () => {
+    chatBox.classList.remove('d-none'); 
+    activerChat.classList.add('d-none');
+
+})
+
+
 form.addEventListener('submit', function(e) {
 e.preventDefault();
 if(input.value) {
@@ -44,17 +47,11 @@ if(input.value) {
     }
 });
 
-activateChat.addEventListener('click' , (e) => {
-    e.preventDefault();
-    chatBox.classList.remove("d-none");     
-    activateChat.classList.add("d-none"); 
-}); 
+
 
 
 // socket 
  
-
-
 // un utilisateur se connecte 
 
 socket.emit("join", input.name); 
@@ -62,13 +59,17 @@ socket.emit("join", input.name);
 
 //reception et affichage du message 
 
+
+
 socket.on('chat message', function(msg) {
 
     var item = document.createElement('li');
     item.classList.add("item");
     item.classList.add("nopoint");
     item.textContent = msg.expediteur + "  " + msg.date + "  : " +msg.message;
-    chatMessage.appendChild(item);
+    console.log(item); 
+    ulMessagesChat.appendChild(item);
+
     window.scrollTo(0, document.body.scrollHeight);
 });
 
@@ -76,49 +77,38 @@ socket.on('chat message', function(msg) {
 
 socket.on('has joined', (user) => {
 
-
     // un autre utilisateur se connecte et on l'affiche
-
-    // dans l'entete du chat 
-    var item = document.querySelector(`.item#${user}`);
-    console.log(item);  
-    if (item === null){     
-    item = document.createElement('p');
-    item.classList.add("item");
-    item.setAttribute('id', user)
-    item.classList.add("nopoint");
-    item.textContent = `${user} is connected`;
-    
-    if (item.id != input.name){ 
-    connectedMessage.appendChild(item)};
-    
-
     // affichage des boutons 
-  
-   
+
     var btn = document.querySelector(`.btn#${user}`);  
     if(user != input.name){
     if(btn === null){ 
+    console.log("ici"); 
     btn = createButtonMorpion(user); 
-    userConnected.appendChild(btn)
+    ulIsConnected.appendChild(btn)
     }}
     }
-})
+)
 
 socket.on('commencer morpion', (demandeur) => {
     console.log("cible atteinte");
     window.focus();
     var confirm = window.confirm( `voulez vous faire une partie de morpion contre ${demandeur}`); 
     if(confirm){
-        const morpionurl = insertMorpionUrl(); 
-        location.assign(morpionurl); 
+        console.log('maintenant la'); 
+        morpionBox.classList.add('morpionBox');
+        morpionBox.setAttribute('id', demandeur) 
+        tabDisplay(tableau, morpionBox, demandeur)
         socket.emit('partie acceptée', input.name)
     }
     })
  
+
+    // ne recoit rien a debugger 
 socket.on("partie debut", () => {
+        console.log("coucou")
         const morpionurl = insertMorpionUrl(); 
-        console.log(morpionurl);
+        
         location.assign(morpionurl); 
 
 
@@ -155,6 +145,7 @@ const createButtonMorpion = (client) => {
         var btn = document.createElement('button');
         btn.classList.add('btn');
         btn.classList.add('btn-success');
+        btn.classList.add('btnUser')
         btn.setAttribute('id', client); 
         btn.textContent = client;
         

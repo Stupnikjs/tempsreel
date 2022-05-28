@@ -1,41 +1,36 @@
-<%- include('../partiel/header.ejs') %>
+<%- include('../partiel/headernonav.ejs') %>
 
-<h1> Bonjour <%=user.username %> </h1>
+<h1  > Bonjour <%=user.username %> </h1>
 
-<div class="container">
-    <div id="mur">
-        <h2> Vos messages</h2>
-    <div id="messageMur">
-        <% for( let index = 0; index < message.length; index++ ) { %>
-            <%= message[index]["message"] %> 
-            <%= message[index]["date"] %> 
-        <% } %>
-        
+
+<div class="container mainBox">
+    <div id="murBox" class="bg-light">  
+        <ul id="connectedMessages"></ul>
+        <div id="ulIsConnected" class="" >
+        </div> 
+        <div id="morpionBox"></div> 
     </div>
-<a href="/profile/morpion/<%=user._id %>"> Jouez au morpion</a>
+    <button id="activerChat" class="btn btn-success">Afficher chat</button>
+    <div id="chatBox" class="bg-info d-none">
+    <button id="masquerChat" class="btn btn-success">Masquer le chat</button>
+     <h2 id="chatTitle" class=""> CHAT </h2>   
+     <form action="" id="chatForm">
+         
+        <input id="inputChat" name=<%=user.username %> type="text" autocomplete="off">
+        <button type="submit" class="btn btn-light d-block w-100" id="chatSendButton">Envoyer</button>
+     </form>   
+     <ul id="ulMessagesChat" class="bg-light ">
+     </ul>
+
+    </div>
+
 </div>
-    <aside> 
-        <button id="activateChat" class="d-none btn btn-danger"> Activer le chat</button>
-        <div class="" id="chatBox">
-            <div id="subChatBox">
-                <h2> Chat</h2>
-                <div id="connectedMessage">
-            </div>
-                <form id="chatForm" action="" method="">
-                    <input type="text" id="chatInput" name=<%=user.username %> >
-                    <button class="btn btn-primary" type="submit" id="sendChat">Envoyer</button>
-                    <ul id="chatMessages">
-                        </ul>
-                </form>
-                <button id="reduceChat" class="btn btn-danger"> Reduire le chat </button>
-            </div>
-            <div>
-                <ul id="userConnected">
-                </ul>
-            </div>
-        </div>
-    </aside>
-</div>
+
+
+
+
 <script src="/socket.io/socket.io.js"></script>
+<script src="/jsClient/morpion.js"></script>
 <script src="/jsClient/chat.js"></script>
+<script src="/jsClient/profile.js"></script>
 <%- include('../partiel/footer.ejs') %> 

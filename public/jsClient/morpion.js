@@ -9,17 +9,14 @@ var tableau = [
 
 const btnMorpion = document.querySelector('.btnMorpion'); 
 
+const morpionBox = document.querySelector('.morpionBox'); 
 
-
-
-
-
-const gameBox = document.querySelector('#gameBox'); 
 
 // affichage de la grille
 
-const tabDisplay = (tab, parent) => {
+const tabDisplay = (tab, parent, adversaire) => {
 
+   
 for ( var i = 0 ; i < tab.length ; i++){  // boucle sur la colone 
 for (var j = 0 ; j < tab[i].length; j++){   // boucle sur la ligne 
 
@@ -46,7 +43,13 @@ for (var j = 0 ; j < tab[i].length; j++){   // boucle sur la ligne
     var BtnX = creerBoutonCase( BtnX, e.target, 'X');
     var BtnO = creerBoutonCase(BtnO, e.target, 'O'); 
     BtnX.addEventListener('click', ()=> {
-        var tableauModif = modifierTabClick(tableau, BtnX); 
+        var tableauModif = modifierTabClick(tableau, BtnX);
+        socket.emit("moove", {tableauModif: tableauModif, cible: adversaire}) 
+        
+    })
+    BtnO.addEventListener('click', ()=> {
+        var tableauModif = modifierTabClick(tableau, BtnO);
+        socket.emit("moove", {tableauModif: tableauModif, cible: adversaire}) 
         
     })
     if (e.target instanceof HTMLDivElement){
@@ -62,10 +65,6 @@ for (var j = 0 ; j < tab[i].length; j++){   // boucle sur la ligne
 }
 console.log(parent)
 }
-
-
-tabDisplay(tableau,gameBox); 
-
 
 
  

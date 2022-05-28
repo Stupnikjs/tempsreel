@@ -3,9 +3,15 @@ const loggRouteur = express.Router();
 const bodyParser = require('body-parser');
 const userSchema = require('../modeles/user.modele');
 
-const { verifySchemaMailPasswordCreateToken, userRegister, } = require('../controllers/loggController');
+const { verifySchemaMailPasswordCreateToken, userRegister, checkTokenGet} = require('../controllers/loggController');
+
 
 loggRouteur.use(bodyParser.urlencoded({extended:false})); 
+
+
+
+
+
 
 //-----------------------------GET---------------------------------------------------
 
@@ -20,9 +26,14 @@ loggRouteur.get('/register', (req,res) => {
 })
 })
 
+loggRouteur.get("/profile/:id", checkTokenGet ) 
+
+
+
+
 //-----------------------------POST-------------------------------------------
 
-loggRouteur.post('/signin', verifySchemaMailPasswordCreateToken); 
+loggRouteur.post('/signin',  verifySchemaMailPasswordCreateToken); 
 loggRouteur.post('/register', userRegister); 
 
 
